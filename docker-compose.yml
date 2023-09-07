@@ -1,0 +1,61 @@
+services:
+  client:
+    container_name: shop-client
+    build: ./client
+    volumes:
+      - build-client:/usr/src/app/dist
+    restart: unless-stopped    
+    depends_on:
+      - server
+      - server_postgres
+
+  server:
+    container_name: shop-server
+    build: ./server
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - PORT=${PORT}
+      - TOKEN=${TOKEN}
+      - JWT_SECRET=${JWT_SECRET}
+    ports:
+      - "3000:3000"   
+    restart: unless-stopped
+    depends_on:
+      - server_postgres 
+
+  server_postgres:
+    container_name: shop-postgres
+    image: postgres:14.8-alpine3.17
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DATABASE=shop-postgres
+    restart: unless-stopped
+    volumes:
+      - postgres-shop:/var/lib/postgresql/data  
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: docker-ru-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - build-client:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      
+    restart: unless-stopped 
+    depends_on:
+      - server_postgres
+      - server
+      - client 
+      
+         
+
+volumes:
+  postgres-shop:
+  build-client:
+
+

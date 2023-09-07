@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  login    String @unique
+  password String
+}
+
+model User {
+  telegId   Int      @unique @map("teleg_id")
+  avatar    String?
+  name      String?
+  address   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  order     Order[]
+}
+
+model Product {
+  id           Int      @id @default(autoincrement())
+  category     Category @relation(fields: [categoryName], references: [name])
+  bottle       Bottle   @relation(fields: [bottleSize], references: [size])
+  price        Int
+  src          String
+  categoryName String
+  bottleSize   Int
+}
+
+model Category {
+  name    String    @unique
+  title   String
+  src     String
+  product Product[]
+  order   Order[]
+}
+
+model Bottle {
+  size    Int       @unique
+  src     String
+  product Product[]
+}
+
+model Order {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userTelegId], references: [telegId])
+  address      String
+  category     Category @relation(fields: [categoryName], references: [name])
+  bottle5      Int      @map("bottle_5")
+  bottle10     Int      @map("bottle_10")
+  bottle20     Int      @map("bottle_20")
+  price        Int
+  daily        Boolean  @default(false)
+  dailyData    String   @default("") @map("daily_data")
+  dailyWeek    Boolean  @default(true) @map("daily_week")
+  completed    Boolean  @default(false)
+  createdAt    DateTime @default(now()) @map("created_at")
+  deletedAt    DateTime @updatedAt @map("deleted_at")
+  deleted      Boolean  @default(false)
+  sale         Sale?    @relation(fields: [saleName], references: [name])
+  categoryName String
+  saleName     String?
+  userTelegId  Int
+}
+
+model Sale {
+  name  String  @unique
+  order Order[]
+}
