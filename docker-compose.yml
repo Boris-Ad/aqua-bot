@@ -45,6 +45,7 @@ services:
     volumes:
       - build-client:/usr/share/nginx/html
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ../../etc/letsencrypt:/etc/letsencrypt
       
     restart: unless-stopped 
     depends_on:
