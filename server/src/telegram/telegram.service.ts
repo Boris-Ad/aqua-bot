@@ -26,10 +26,11 @@ export class TelegramService {
   //   await ctx.reply('👍');
   // }
 
-  async sendMessage(address: string) {
+  async sendMessage(address: string, reply_id: number) {
     const chatId = this.configService.get('CHAT_ID');
     this.bot.telegram.sendMessage(761362383, 'Заказ на доставку, адрес: ' + address, {
       reply_markup: { force_reply: true, input_field_placeholder: 'Отправьте ответ', selective: true },
+      reply_to_message_id: reply_id,
     });
   }
 }
