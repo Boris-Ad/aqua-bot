@@ -28,7 +28,7 @@ export class TelegramService {
 
   async sendMessage(address: string) {
     const chatId = this.configService.get('CHAT_ID');
-    this.bot.telegram.sendMessage(chatId, 'Заказ на доставку, адрес: ' + address, {
+    this.bot.telegram.sendMessage(761362383, 'Заказ на доставку, адрес: ' + address, {
       reply_markup: { force_reply: true, input_field_placeholder: 'Отправьте ответ', selective: true },
     });
   }
