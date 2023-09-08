@@ -34,11 +34,7 @@ services:
       - POSTGRES_DATABASE=shop-postgres
     restart: unless-stopped
     volumes:
-      - type: volume
-        source: postgres-shop
-        target: /var/lib/postgresql/data
-        volume:
-          nocopy: false
+      - ./db-data/:/var/lib/postgresql/data
 
   nginx:
     image: nginx:stable-alpine
@@ -58,7 +54,6 @@ services:
       - client
 
 volumes:
-  postgres-shop:
   build-client:
 
 
