@@ -15,4 +15,3 @@ export const getProductsByCategory = async (category: string): Promise<IProduct[
   return await api.get('products/filterByCategory/' + category).json();
 };
 
-

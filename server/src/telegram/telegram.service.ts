@@ -15,7 +15,7 @@ export class TelegramService {
       {
         caption: 'Доставка воды',
         reply_markup: {
-          inline_keyboard: [[{ text: 'Сделать заказ', web_app: { url: 'https://aqua-bot.tw1.ru/' } }]],
+          inline_keyboard: [[{ text: 'Сделать заказ', web_app: { url: 'https://aqua-bot.tw1.ru' } }]],
         },
       },
     );

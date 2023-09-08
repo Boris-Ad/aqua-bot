@@ -4,7 +4,7 @@ services:
     build: ./client
     volumes:
       - build-client:/usr/src/app/dist
-    restart: unless-stopped    
+    restart: unless-stopped
     depends_on:
       - server
       - server_postgres
@@ -18,10 +18,10 @@ services:
       - TOKEN=${TOKEN}
       - JWT_SECRET=${JWT_SECRET}
     ports:
-      - "3000:3000"   
+      - "3000:3000"
     restart: unless-stopped
     depends_on:
-      - server_postgres 
+      - server_postgres
 
   server_postgres:
     container_name: shop-postgres
@@ -34,7 +34,11 @@ services:
       - POSTGRES_DATABASE=shop-postgres
     restart: unless-stopped
     volumes:
-      - postgres-shop:/var/lib/postgresql/data  
+      - type: volume
+        source: postgres-shop
+        target: /var/lib/postgresql/data
+        volume:
+          nocopy: false
 
   nginx:
     image: nginx:stable-alpine
@@ -46,14 +50,12 @@ services:
       - build-client:/usr/share/nginx/html
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ../../etc/letsencrypt:/etc/letsencrypt
-      
-    restart: unless-stopped 
+
+    restart: unless-stopped
     depends_on:
       - server_postgres
       - server
-      - client 
-      
-         
+      - client
 
 volumes:
   postgres-shop:
