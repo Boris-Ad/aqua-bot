@@ -30,9 +30,7 @@ export class TelegramService {
     const chatId = this.configService.get('CHAT_ID');
     this.bot.telegram.sendMessage(
       761362383,
-      'Заказ на доставку, адрес: ' + address,
-      { reply_to_message_id: reply_id },
-      //{reply_markup: { force_reply: true, input_field_placeholder: 'Отправьте ответ', selective: true },
+      'Заказ на доставку, адрес: ' + address,{reply_markup:{force_reply:true}}
     );
   }
 }
